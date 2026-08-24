@@ -51,7 +51,16 @@
   </div>
 
   <div class="card" id="carte-rapport" style="display:none;">
-    <h2>Rapport par membre</h2>
+    <h2>Rapport</h2>
+    
+    <!-- Filtre par membre -->
+    <div style="margin-bottom: 16px;">
+      <label for="selecteurMembre" style="font-weight: 600; display: block; margin-bottom: 6px;">Membre à afficher :</label>
+      <select id="selecteurMembre" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc;">
+        <option value="tous">-- Tous les membres (Vue globale) --</option>
+      </select>
+    </div>
+
     <div id="listePersonnes"></div>
   </div>
 
