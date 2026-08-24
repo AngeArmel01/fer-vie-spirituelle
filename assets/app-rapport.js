@@ -123,7 +123,7 @@ function rendreRapport(personnes) {
     carteGlobale.setAttribute("data-index", "globale");
     carteGlobale.style.border = "2px solid #8b0000"; // Accentuation visuelle
 
-    let htmlGlobal = '<div class="entete"><span class="nom">📊 MOYENNE GÉNÉRALE DIACONIE</span>' +
+    let htmlGlobal = '<div class="entete"><span class="nom"> MOYENNE GÉNÉRALE DIACONIE</span>' +
       '<span class="moyenne">' +
       'spirituel ' + (moyennesGlobales.spirituel === null ? "—" : moyennesGlobales.spirituel + "%") +
       ' · implication ' + (moyennesGlobales.implication === null ? "—" : moyennesGlobales.implication + "%") +
