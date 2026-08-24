@@ -71,12 +71,13 @@
     });
   }
 
-  function filtrerAffichageMembre() {
+ function filtrerAffichageMembre() {
     if (!elSelecteurMembre) return;
     const val = elSelecteurMembre.value;
     const cartes = elListePersonnes.querySelectorAll(".personne-card");
     cartes.forEach(card => {
-      if (val === "tous" || card.getAttribute("data-index") === val) {
+      const idx = card.getAttribute("data-index");
+      if (val === "tous" || idx === val) {
         card.style.display = "block";
       } else {
         card.style.display = "none";
@@ -84,8 +85,69 @@
     });
   }
 
-  function rendreRapport(personnes) {
+function rendreRapport(personnes) {
     elListePersonnes.innerHTML = "";
+
+    // 1. Calcul des moyennes générales de la diaconie
+    const moyennesGlobales = { spirituel: null, implication: null, activites: {} };
+    
+    if (personnes.length > 0) {
+      let totalSpir = 0, countSpir = 0;
+      let totalImp = 0, countImp = 0;
+
+      // Calcul par activité
+      ACTIVITES.forEach(a => {
+        let somme = 0, nb = 0;
+        personnes.forEach(p => {
+          const pct = p.activites[a.code];
+          if (pct !== null && pct !== undefined) {
+            somme += pct;
+            nb++;
+          }
+        });
+        moyennesGlobales.activites[a.code] = nb > 0 ? Math.round(somme / nb) : null;
+      });
+
+      // Calcul des moyennes globale Spirituel et Implication
+      personnes.forEach(p => {
+        if (p.moyenneSpirituel !== null) { totalSpir += p.moyenneSpirituel; countSpir++; }
+        if (p.moyenneImplication !== null) { totalImp += p.moyenneImplication; countImp++; }
+      });
+      moyennesGlobales.spirituel = countSpir > 0 ? Math.round(totalSpir / countSpir) : null;
+      moyennesGlobales.implication = countImp > 0 ? Math.round(totalImp / countImp) : null;
+    }
+
+    // 2. Affichage de la carte "Moyenne Générale Diaconie"
+    const carteGlobale = document.createElement("div");
+    carteGlobale.className = "personne-card globale-card";
+    carteGlobale.setAttribute("data-index", "globale");
+    carteGlobale.style.border = "2px solid #8b0000"; // Accentuation visuelle
+
+    let htmlGlobal = '<div class="entete"><span class="nom">📊 MOYENNE GÉNÉRALE DIACONIE</span>' +
+      '<span class="moyenne">' +
+      'spirituel ' + (moyennesGlobales.spirituel === null ? "—" : moyennesGlobales.spirituel + "%") +
+      ' · implication ' + (moyennesGlobales.implication === null ? "—" : moyennesGlobales.implication + "%") +
+      '</span></div>';
+
+    ["spirituel", "implication"].forEach(cat => {
+      const activitesCat = ACTIVITES.filter(a => a.categorie === cat);
+      if (!activitesCat.length) return;
+      htmlGlobal += '<div class="groupe-titre">' + (LIBELLES_CATEGORIE[cat] || cat) + '</div>';
+      activitesCat.forEach(a => {
+        const pct = moyennesGlobales.activites[a.code];
+        const na = pct === null;
+        htmlGlobal += '<div class="activite-row' + (na ? " na" : "") + '">' +
+          '<div class="nom-act">' + a.label + '</div>' +
+          '<div class="pct">' + (na ? "n/a" : pct + "%") + '</div>' +
+          '<div class="barre"><div class="barre-inner" style="width:' + (na ? 0 : pct) + '%"></div></div>' +
+          '</div>';
+      });
+    });
+
+    carteGlobale.innerHTML = htmlGlobal;
+    elListePersonnes.appendChild(carteGlobale);
+
+    // 3. Affichage des cartes individuelles par membre
     personnes.forEach((p, index) => {
       const card = document.createElement("div");
       card.className = "personne-card";
