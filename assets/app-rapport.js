@@ -7,6 +7,7 @@
   const elSelecteurPeriode = document.getElementById("selecteurPeriode");
   const elSelecteurMois = document.getElementById("selecteurMois");
   const elSelecteurSaison = document.getElementById("selecteurSaison");
+  const elSelecteurMembre = document.getElementById("selecteurMembre");
   const elBtnActualiser = document.getElementById("btnActualiser");
   const elPeriodeHint = document.getElementById("periodeHint");
   const elListePersonnes = document.getElementById("listePersonnes");
@@ -32,7 +33,6 @@
   function peuplerSaisons() {
     elSelecteurSaison.innerHTML = "";
     const maintenant = new Date();
-    // Année de départ de la saison en cours : si on est avant septembre, la saison a démarré l'an dernier.
     const anneeCouranteDebut = maintenant.getMonth() >= 8 ? maintenant.getFullYear() : maintenant.getFullYear() - 1;
     for (let i = 0; i < 4; i++) {
       const anneeDebut = anneeCouranteDebut - i;
@@ -60,11 +60,36 @@
 
   const LIBELLES_CATEGORIE = { spirituel: "Vie spirituelle", implication: "Implication diaconie" };
 
+  function mettreAJourFiltreMembres(personnes) {
+    if (!elSelecteurMembre) return;
+    elSelecteurMembre.innerHTML = '<option value="tous">-- Tous les membres (Vue globale) --</option>';
+    personnes.forEach((p, idx) => {
+      const opt = document.createElement("option");
+      opt.value = idx;
+      opt.textContent = p.nom;
+      elSelecteurMembre.appendChild(opt);
+    });
+  }
+
+  function filtrerAffichageMembre() {
+    if (!elSelecteurMembre) return;
+    const val = elSelecteurMembre.value;
+    const cartes = elListePersonnes.querySelectorAll(".personne-card");
+    cartes.forEach(card => {
+      if (val === "tous" || card.getAttribute("data-index") === val) {
+        card.style.display = "block";
+      } else {
+        card.style.display = "none";
+      }
+    });
+  }
+
   function rendreRapport(personnes) {
     elListePersonnes.innerHTML = "";
-    personnes.forEach(p => {
+    personnes.forEach((p, index) => {
       const card = document.createElement("div");
       card.className = "personne-card";
+      card.setAttribute("data-index", index);
 
       let html = '<div class="entete"><span class="nom">' + p.nom + '</span>' +
         '<span class="moyenne">' +
@@ -90,6 +115,9 @@
       card.innerHTML = html;
       elListePersonnes.appendChild(card);
     });
+
+    mettreAJourFiltreMembres(personnes);
+    filtrerAffichageMembre();
 
     elTexteRapport.textContent = genererTexte(personnes);
     elCarteRapport.style.display = "block";
@@ -128,6 +156,10 @@
     }).catch(() => {
       elListePersonnes.innerHTML = '<p class="hint">Impossible de contacter le serveur.</p>';
     });
+  }
+
+  if (elSelecteurMembre) {
+    elSelecteurMembre.addEventListener("change", filtrerAffichageMembre);
   }
 
   elBtnActualiser.addEventListener("click", chargerRapport);
