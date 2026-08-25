@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>(Événements) Hub Vie Spirituelle FER</title>
+<link rel="icon" href="assets/logo.jpg">
+<link rel="stylesheet" href="assets/style.css">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+<div class="shell">
+  <header class="top">
+    <img class="logo" src="assets/logo.jpg" alt="Logo FER">
+    <div class="titles">
+      <div class="eyebrow">Fondation Ecclesia Radiorum</div>
+      <h1>Hub Vie Spirituelle</h1>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <a href="index.html">Aujourd'hui</a>
+    <a href="evenements.html" class="active">Événements</a>
+    <a href="rapport.html">Rapport</a>
+  </nav>
+
+  <div class="card" id="carte-connexion">
+    <h2>Connexion</h2>
+    <p class="hint">Connecte-toi pour voir les événements et déclarer ta présence.</p>
+    <div id="gsi-button"></div>
+    <div id="session" class="session" style="display:none; margin-top:10px;">
+      <div class="avatar" id="avatarInitiales"></div>
+      <div class="who">Connecté·e en tant que <b id="nomSession"></b></div>
+      <button class="link" id="btnDeconnexion">changer de compte</button>
+    </div>
+    <div class="msg warn" id="msgAuth"></div>
+  </div>
+
+  <div class="card" id="carte-nouvel-evenement" style="display:none;">
+    <h2>Créer un événement <span class="badge-day">Bergers</span></h2>
+    <p class="hint">Visible uniquement par les bergers. Une fois créé, chaque membre pourra se déclarer présent lui-même.</p>
+    <div class="form-grid">
+      <input type="text" id="nouveauNom" placeholder="Nom de l'événement (ex: Retraite de février)">
+      <select id="nouvelleCategorie"></select>
+      <input type="date" id="nouvelleDate">
+    </div>
+    <button class="btn btn-primary" id="btnCreerEvenement">Créer l'événement</button>
+    <div class="msg ok" id="msgCreationSucces">Événement créé ✓</div>
+    <div class="msg warn" id="msgCreationErreur"></div>
+  </div>
+
+  <div class="card" id="carte-evenements" style="display:none;">
+    <h2>Mes événements</h2>
+    <p class="hint">Coche les événements auxquels tu as participé. Un événement à venir ne peut pas encore être coché.</p>
+    <div id="listeEvenements" class="activite-liste"></div>
+    <div class="empty-state" id="etatVideEvenements" style="display:none;">
+      Aucun événement enregistré pour l'instant.
+    </div>
+  </div>
+
+  <footer class="bas">Fondation Ecclesia Radiorum</footer>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="assets/config.js"></script>
+<script src="assets/rules.js"></script>
+<script src="assets/auth.js"></script>
+<script src="assets/app-evenements.js"></script>
+</body>
+</html>
