@@ -168,10 +168,10 @@ function periodeAnnee(anneeDebut, type) {
  * chaque événement via la page "Événements".
  */
 const CATEGORIES_EVENEMENTS = [
-  { code: "MW",                  label: "Motivation W" },
+  { code: "MW",                  label: "Motivation Week" },
   { code: "RETRAITE",            label: "Retraite" },
   { code: "REGNUM_CHRISTI",      label: "Regnum Christi" },
-  { code: "EV_DIMB",             label: "Évangélisation Dimbokro" },
+  { code: "EV_DIMB",             label: "Évangélisation" },
   { code: "PELE_COMM",           label: "Pèlerinage Communautaire" },
   { code: "CONVENTION_ANNUELLE", label: "Convention Annuelle" },
   { code: "SEMAINE_EVANG",       label: "Semaine d'Évangélisation" },
